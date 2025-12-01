@@ -1,0 +1,2 @@
+combined.csv: Data of 16 participants (excluding Mehak, Ajinkya). Removed 'lave-magma' case due to inconsistency. 
+Dataset now has 16*76 entries, 19 pairs with 4 conditions
