@@ -1,292 +1,312 @@
 """
-PSYCHOPY EVENT LISTENER
-=======================================
+PSYCHOPY EVENT LISTENER (NO REUSABILITY VERSION)
+================================================
 
-This script is a comprehensive guide to the `psychopy.event` module.
-It covers:
-1. Blocking Keyboard Input (Pausing the experiment)
-2. Reaction Times & Timed Input (Recording data)
-3. Non-Blocking Input (Real-time movement)
-4. Mouse Tracking (Coordinates)
-5. Object Interaction (Clicking specific buttons)
-
+This script demonstrates the same features but instantiates 
+new objects for every single step instead of reusing variables.
 """
 
 # --- IMPORTS ---
 from psychopy import visual, core, event, gui
 import sys
 
-# --- SETUP: WINDOW & CONSTANTS ---
-
-# Define some useful colors (R, G, B) in PsychoPy's -1 to +1 scale
-BLACK = [-1, -1, -1]
-WHITE = [1, 1, 1]
-GREEN = [-1, 1, -1]
-RED   = [1, -1, -1]
-BLUE  = [-1, -1, 1]
+# --- SETUP: WINDOW ONLY ---
+# We do not define colors globally here. We will hardcode them later.
 
 print("--- Initializing Window ---")
-# We create a window 1024x768. 'fullscr=False' makes it easier to close if it crashes.
 win = visual.Window(
     size=[1024, 768],
-    units="pix",       # We use pixels for easy coordinate understanding
-    color=BLACK,       # Background color
+    units="pix",
+    color=[-1, -1, -1], # Hardcoded Black
     fullscr=False,     
     title="Event Listener Tutorial"
 )
 
-# A generic text object we will reuse to give instructions
-instr_text = visual.TextStim(
+# NOTE: We deleted the generic 'instr_text' and 'feedback_text' objects.
+# We will create specific ones for each lesson below.
+
+# ------------------------------------------------------------------
+# LESSON 1: THE BASICS - Blocking Input
+# ------------------------------------------------------------------
+
+# Create a specific text object just for Lesson 1 instructions
+lesson1_intro = visual.TextStim(
     win, 
-    text="", 
+    text=(
+        "LESSON 1: Blocking Input\n\n"
+        "The script is currently PAUSED using event.waitKeys().\n"
+        "Nothing else will happen until you press a specific key.\n\n"
+        "Press the 'LEFT' or 'RIGHT' arrow key to continue."
+    ), 
     pos=(0, 200), 
     height=30, 
-    color=WHITE,
+    color=[1, 1, 1], # Hardcoded White
     wrapWidth=900
 )
 
-# A generic feedback object for showing what you pressed
-feedback_text = visual.TextStim(
-    win, 
-    text="", 
-    pos=(0, 0), 
-    height=40, 
-    color=GREEN
-)
+lesson1_intro.draw()
+win.flip()
 
-# ------------------------------------------------------------------
-# LESSON 1: THE BASICS - Blocking Input (event.waitKeys)
-# ------------------------------------------------------------------
-# Concept: "Blocking" means the code stops (hangs) at that line 
-# until the event happens. This is used for instructions.
-
-instr_text.text = (
-    "LESSON 1: Blocking Input\n\n"
-    "The script is currently PAUSED using event.waitKeys().\n"
-    "Nothing else will happen until you press a specific key.\n\n"
-    "Press the 'LEFT' or 'RIGHT' arrow key to continue."
-)
-instr_text.draw()
-win.flip() # Flip puts the drawing onto the physical screen
-
-# event.waitKeys() pauses the script.
-# keyList=['left', 'right'] means ONLY those keys will trigger the next line.
-# Pressing 'space' or 'a' here will do nothing.
+# Blocking wait
 keys = event.waitKeys(keyList=['left', 'right'])
 
-# 'keys' is a LIST of strings, e.g., ['left']
-feedback_text.text = f"Great! You pressed: {keys[0]}"
-feedback_text.draw()
+# Create a NEW specific text object just for Lesson 1 feedback
+lesson1_feedback = visual.TextStim(
+    win, 
+    text=f"Great! You pressed: {keys[0]}", 
+    pos=(0, 0), 
+    height=40, 
+    color=[-1, 1, -1] # Hardcoded Green
+)
+
+lesson1_feedback.draw()
 win.flip()
-core.wait(2.0) # Wait 2 seconds so you can read the feedback
+core.wait(2.0)
 
 # ------------------------------------------------------------------
 # LESSON 2: REACTION TIME - Timed Input & Data Capture
 # ------------------------------------------------------------------
-# Concept: Measuring how fast someone responds. We need the Key AND the Time.
 
-instr_text.text = (
-    "LESSON 2: Reaction Time (Data Capture)\n\n"
-    "When the screen turns GREEN, press 'SPACE' as fast as you can.\n"
-    "You have a 2-second time limit.\n\n"
-    "Press any key to start the countdown."
+# Create a specific text object for Lesson 2 instructions
+lesson2_intro = visual.TextStim(
+    win, 
+    text=(
+        "LESSON 2: Reaction Time (Data Capture)\n\n"
+        "When the screen turns GREEN, press 'SPACE' as fast as you can.\n"
+        "You have a 2-second time limit.\n\n"
+        "Press any key to start the countdown."
+    ), 
+    pos=(0, 200), 
+    height=30, 
+    color=[1, 1, 1],
+    wrapWidth=900
 )
-instr_text.draw()
-win.flip()
-event.waitKeys() # Wait for ANY key
 
-# Countdown
+lesson2_intro.draw()
+win.flip()
+event.waitKeys() 
+
+# Countdown loop
 for i in [3, 2, 1]:
-    feedback_text.text = str(i)
-    feedback_text.color = WHITE
-    feedback_text.draw()
+    # Create a specific text object for the countdown number
+    countdown_text = visual.TextStim(
+        win, 
+        text=str(i), 
+        pos=(0, 0), 
+        height=60, 
+        color=[1, 1, 1]
+    )
+    countdown_text.draw()
     win.flip()
     core.wait(1.0)
 
-# Change screen to green stimulus
-circle = visual.Circle(win, radius=50, fillColor=GREEN, lineColor=GREEN)
-circle.draw()
+# Create specific circle for Lesson 2
+reaction_circle = visual.Circle(
+    win, 
+    radius=50, 
+    fillColor=[-1, 1, -1], # Green
+    lineColor=[-1, 1, -1]
+)
+reaction_circle.draw()
 win.flip()
 
-# Start a high-precision clock exactly when we flip the screen
+# Start Clock
 rt_clock = core.Clock()
 
-# event.waitKeys parameters:
-# 1. maxWait=2.0: If no key is pressed in 2s, it returns None.
-# 2. timeStamped=rt_clock: Returns a tuple (key, time_relative_to_clock)
-# 3. keyList=['space']: Only accept spacebar
 user_response = event.waitKeys(maxWait=2.0, keyList=['space'], timeStamped=rt_clock)
 
-# Check results
-if user_response is None:
-    # This happens if 2 seconds passed with no input
-    feedback_text.text = "Too slow! (Timed out)"
-    feedback_text.color = RED
-else:
-    # user_response looks like: [['space', 0.452]]
-    key_name = user_response[0][0] # The key ('space')
-    rt_time  = user_response[0][1] # The time (e.g., 0.452)
-    
-    feedback_text.text = f"Got it! RT: {rt_time:.3f} seconds"
-    feedback_text.color = WHITE
-
-feedback_text.draw()
-win.flip()
-event.waitKeys() # Wait for user to read feedback
-
-# ------------------------------------------------------------------
-# LESSON 3: REAL-TIME - Non-Blocking Input (event.getKeys)
-# ------------------------------------------------------------------
-# Concept: "Polling". We check if a key is pressed, but if not, 
-# we keep running the code (drawing frames). This allows animation.
-
-instr_text.text = (
-    "LESSON 3: Real-Time Movement (Non-Blocking)\n\n"
-    "Use Arrow Keys (Up/Down/Left/Right) to move the blue square.\n"
-    "Press 'Q' to finish this lesson."
+# Create a specific text object for Lesson 2 results
+lesson2_result = visual.TextStim(
+    win, 
+    text="", 
+    pos=(0, 0), 
+    height=40
 )
 
-# Create a character to move
-player = visual.Rect(win, width=50, height=50, fillColor=BLUE)
-player_pos = [0, 0] # Start center
+if user_response is None:
+    lesson2_result.text = "Too slow! (Timed out)"
+    lesson2_result.color = [1, -1, -1] # Red
+else:
+    key_name = user_response[0][0]
+    rt_time  = user_response[0][1]
+    lesson2_result.text = f"Got it! RT: {rt_time:.3f} seconds"
+    lesson2_result.color = [1, 1, 1] # White
 
-# We use a While loop to create an animation frame
-# We must clear old keystrokes first so the square doesn't jump immediately
+lesson2_result.draw()
+win.flip()
+event.waitKeys()
+
+# ------------------------------------------------------------------
+# LESSON 3: REAL-TIME - Non-Blocking Input
+# ------------------------------------------------------------------
+
+# Specific instructions for Lesson 3
+lesson3_intro = visual.TextStim(
+    win,
+    text=(
+        "LESSON 3: Real-Time Movement (Non-Blocking)\n\n"
+        "Use Arrow Keys (Up/Down/Left/Right) to move the blue square.\n"
+        "Press 'Q' to finish this lesson."
+    ),
+    pos=(0, 200),
+    height=30,
+    color=[1, 1, 1],
+    wrapWidth=900
+)
+
+# Specific player object
+l3_player = visual.Rect(
+    win, 
+    width=50, 
+    height=50, 
+    fillColor=[-1, -1, 1] # Blue
+)
+player_pos = [0, 0]
+
 event.clearEvents() 
-
 lesson_active = True
+
 while lesson_active:
-    # 1. Draw instructions and player
-    instr_text.draw()
-    player.pos = player_pos
-    player.draw()
+    # Use the Lesson 3 objects
+    lesson3_intro.draw()
+    l3_player.pos = player_pos
+    l3_player.draw()
     win.flip()
 
-    # 2. Check for keys WITHOUT pausing (getKeys vs waitKeys)
-    # This returns immediately, even if the list is empty.
     keys_pressed = event.getKeys(keyList=['left', 'right', 'up', 'down', 'q'])
 
-    # 3. Process inputs
     if 'q' in keys_pressed:
-        lesson_active = False # Break the loop
+        lesson_active = False 
     
     if 'left' in keys_pressed:
-        player_pos[0] -= 20 # Move x left
+        player_pos[0] -= 20
     if 'right' in keys_pressed:
-        player_pos[0] += 20 # Move x right
+        player_pos[0] += 20
     if 'up' in keys_pressed:
-        player_pos[1] += 20 # Move y up
+        player_pos[1] += 20
     if 'down' in keys_pressed:
-        player_pos[1] -= 20 # Move y down
+        player_pos[1] -= 20
 
-feedback_text.text = "Movement Demo Complete!"
-feedback_text.color = WHITE
-feedback_text.draw()
+# Specific feedback for Lesson 3
+lesson3_end = visual.TextStim(
+    win, 
+    text="Movement Demo Complete!", 
+    color=[1, 1, 1], 
+    pos=(0,0), 
+    height=40
+)
+lesson3_end.draw()
 win.flip()
 core.wait(1.5)
 
 # ------------------------------------------------------------------
-# LESSON 4: THE MOUSE - Tracking Coordinates
+# LESSON 4: THE MOUSE
 # ------------------------------------------------------------------
-# Concept: Using the visual.CustomMouse object or event.Mouse
 
-instr_text.text = (
-    "LESSON 4: Mouse Tracking\n\n"
-    "Move your mouse. The text will show coordinates.\n"
-    "Click the LEFT mouse button to finish."
+# Specific instructions for Lesson 4
+lesson4_intro = visual.TextStim(
+    win,
+    text=(
+        "LESSON 4: Mouse Tracking\n\n"
+        "Move your mouse. The text will show coordinates.\n"
+        "Click the LEFT mouse button to finish."
+    ),
+    pos=(0, 200),
+    height=30,
+    color=[1, 1, 1],
+    wrapWidth=900
 )
 
-# Create the mouse object
-# visible=False would hide the standard cursor (good for experiments)
-my_mouse = event.Mouse(visible=True, win=win)
+# Specific text object to display coordinates
+lesson4_coords = visual.TextStim(
+    win,
+    text="",
+    pos=(0, 0),
+    height=40,
+    color=[-1, 1, -1] # Green
+)
 
-# Reset any previous clicks so we don't accidentally skip
+my_mouse = event.Mouse(visible=True, win=win)
 my_mouse.clickReset()
 
 lesson_active = True
 while lesson_active:
-    # 1. Get Mouse Position (x, y)
     mouse_x, mouse_y = my_mouse.getPos()
-
-    # 2. Get Mouse Buttons
-    # Returns [Left_Pressed, Center_Pressed, Right_Pressed] (0 or 1)
     buttons = my_mouse.getPressed()
     
-    # 3. Update Text
-    feedback_text.text = f"X: {mouse_x:.0f}, Y: {mouse_y:.0f}"
-    feedback_text.pos = (0, 0)
+    # Update the specific Lesson 4 object
+    lesson4_coords.text = f"X: {mouse_x:.0f}, Y: {mouse_y:.0f}"
     
-    # Draw elements
-    instr_text.draw()
-    feedback_text.draw()
+    lesson4_intro.draw()
+    lesson4_coords.draw()
     win.flip()
-
-    # 4. Check for exit condition (Left Click)
-    if buttons[0] == 1: # buttons[0] is Left Click
+    
+    if buttons[0] == 1:
         lesson_active = False
 
-core.wait(0.5) # Slight pause to prevent accidental double clicks
+core.wait(0.5)
 
 # ------------------------------------------------------------------
-# LESSON 5: MOUSE INTERACTION - Clicking Objects (isPressedIn)
+# LESSON 5: MOUSE INTERACTION
 # ------------------------------------------------------------------
-# Concept: Detecting if the mouse was clicked specifically INSIDE a shape.
 
-instr_text.text = (
-    "LESSON 5: Clicking Objects\n\n"
-    "There are two buttons below.\n"
-    "Click the RED button to exit the tutorial."
+# Specific instructions for Lesson 5
+lesson5_intro = visual.TextStim(
+    win,
+    text=(
+        "LESSON 5: Clicking Objects\n\n"
+        "There are two buttons below.\n"
+        "Click the RED button to exit the tutorial."
+    ),
+    pos=(0, 200),
+    height=30,
+    color=[1, 1, 1],
+    wrapWidth=900
 )
 
-# Create two buttons
-btn_safe = visual.Rect(win, width=150, height=80, pos=(-200, -100), fillColor=GREEN)
-txt_safe = visual.TextStim(win, text="Stay", pos=(-200, -100), height=25)
+# Specific objects for Lesson 5 buttons
+l5_btn_safe = visual.Rect(win, width=150, height=80, pos=(-200, -100), fillColor=[-1, 1, -1])
+l5_txt_safe = visual.TextStim(win, text="Stay", pos=(-200, -100), height=25)
 
-btn_exit = visual.Rect(win, width=150, height=80, pos=(200, -100), fillColor=RED)
-txt_exit = visual.TextStim(win, text="EXIT", pos=(200, -100), height=25)
+l5_btn_exit = visual.Rect(win, width=150, height=80, pos=(200, -100), fillColor=[1, -1, -1])
+l5_txt_exit = visual.TextStim(win, text="EXIT", pos=(200, -100), height=25)
 
-my_mouse.clickReset() # Reset mouse state again
+# Specific feedback text for Lesson 5
+l5_feedback = visual.TextStim(win, text="", pos=(0, -250), height=40, color=[1, 1, 1])
+
+my_mouse.clickReset()
 
 lesson_active = True
 while lesson_active:
-    # Check if the mouse is hovering over buttons (for visual effect)
-    if btn_safe.contains(my_mouse):
-        btn_safe.opacity = 0.5 # Dim if hovering
+    # Handling opacity locally
+    if l5_btn_safe.contains(my_mouse):
+        l5_btn_safe.opacity = 0.5
     else:
-        btn_safe.opacity = 1.0 # Full brightness
+        l5_btn_safe.opacity = 1.0
 
-    if btn_exit.contains(my_mouse):
-        btn_exit.opacity = 0.5
+    if l5_btn_exit.contains(my_mouse):
+        l5_btn_exit.opacity = 0.5
     else:
-        btn_exit.opacity = 1.0
+        l5_btn_exit.opacity = 1.0
 
-    # Draw everything
-    instr_text.draw()
-    btn_safe.draw()
-    txt_safe.draw()
-    btn_exit.draw()
-    txt_exit.draw()
-    
-    # Show status message
-    feedback_text.pos = (0, -250)
-    feedback_text.draw()
+    lesson5_intro.draw()
+    l5_btn_safe.draw()
+    l5_txt_safe.draw()
+    l5_btn_exit.draw()
+    l5_txt_exit.draw()
+    l5_feedback.draw()
     
     win.flip()
 
-    # Check for clicks using isPressedIn
-    # This checks: 1. Is the button currently down? AND 2. Is it inside this shape?
-    if my_mouse.isPressedIn(btn_safe):
-        feedback_text.text = "You clicked the GREEN button!"
-        feedback_text.color = GREEN
-        
-        # Important: Wait until button is released so we don't register 60 clicks a second
-        while my_mouse.getPressed()[0] == 1:
-            pass 
+    if my_mouse.isPressedIn(l5_btn_safe):
+        l5_feedback.text = "You clicked the GREEN button!"
+        l5_feedback.color = [-1, 1, -1]
+        while my_mouse.getPressed()[0] == 1: pass 
 
-    if my_mouse.isPressedIn(btn_exit):
-        feedback_text.text = "Exiting..."
-        feedback_text.color = RED
-        feedback_text.draw()
+    if my_mouse.isPressedIn(l5_btn_exit):
+        l5_feedback.text = "Exiting..."
+        l5_feedback.color = [1, -1, -1]
+        l5_feedback.draw()
         win.flip()
         core.wait(1.0)
         lesson_active = False
@@ -294,6 +314,5 @@ while lesson_active:
 # ------------------------------------------------------------------
 # CLEANUP
 # ------------------------------------------------------------------
-# Always close the window and quit core to free up your computer's resources
 win.close()
 core.quit()

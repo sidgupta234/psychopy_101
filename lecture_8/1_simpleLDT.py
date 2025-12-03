@@ -22,7 +22,9 @@ print(f"DEBUG: Stimuli data loaded. Total trials: {len(word_1)}")
 # Get participant info using a simple dialog box
 info_dlg = gui.Dlg(title='Participant Info')
 info_dlg.addField('Name: ', 'Tester')
+info_dlg.addField('Age: ', '76')
 info_dlg.show()
+print(info_dlg.data)
 name = info_dlg.data[0] 
 print(f"DEBUG: Participant Name captured: {name}")
 
@@ -33,8 +35,7 @@ print("DEBUG: PsychoPy Window initialized.")
 # Define reusable text objects (TextStim)
 text_stimulus = visual.TextStim(win0, text='', bold=True, pos=(0.0, 0.0), color=(1.0, 1.0, 1.0), height=60)
 feedback_stim = visual.TextStim(win0, text='', bold=False, pos=(0.0, 0.0), color=(1.0, 1.0, 1.0), height=40)
-welcome_text = visual.TextStim(win0, text='''You will be shown two words, press "y" if both are legit, "n" if not both legit,
-                               Press space to start the 5-trial test!''', bold=True, pos=(0.0, 0.0), color=(1.0, 1.0, 1.0))
+welcome_text = visual.TextStim(win0, text='''You will be shown two words, press "y" if both are legit, "n" if not both legit, Press space to start the 5-trial test!''', bold=True, pos=(0.0, 0.0), color=(1.0, 1.0, 1.0))
 
 # Lists to store the results collected during the experiment
 key_pressed = []
