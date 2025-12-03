@@ -38,7 +38,7 @@ win = visual.Window(
 # A generic text object we will reuse to give instructions
 instr_text = visual.TextStim(
     win, 
-    text="Welcome! Press SPACE to begin.", 
+    text="", 
     pos=(0, 200), 
     height=30, 
     color=WHITE,

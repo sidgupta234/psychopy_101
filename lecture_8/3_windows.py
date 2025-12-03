@@ -6,7 +6,6 @@ PSYCHOPY WINDOW
 2. The Coordinate Systems (Pixels vs. Normalized)
 3. The "Flip" Mechanism (Double Buffering)
 4. Dynamic Properties (Changing background on the fly)
-5. Aspect Ratios (Height units)
 
 """
 
@@ -32,8 +31,8 @@ print("--- Lesson 1: Basic Window Setup ---")
 
 win = visual.Window(
     size=[800, 600],    # [width, height]. We use a smaller window for this demo.
-    fullscr=False,      # False = Windowed mode (good for coding). True = Fullscreen (for data).
-    units="pix",        # **CRITICAL**: The default unit of measurement. "pix" = pixels.
+    fullscr=False,      # False = Windowed mode (good for coding). True = Fullscreen (for perfomring experiment).
+    units="pix",        # The default unit of measurement. "pix" = pixels.
     color=BLACK,        # Background color (-1 to 1 scale).
     allowGUI=True,      # Show the close button/title bar? (False for final experiments)
     title="Window Tutorial"
@@ -202,37 +201,37 @@ for color in colors:
     win.flip() # Update the screen to show the new background
     core.wait(0.5)
 
-# ------------------------------------------------------------------
-# LESSON 5: "HEIGHT" UNITS - Solving Aspect Ratio
-# ------------------------------------------------------------------
-# "norm" units stretch if your screen isn't square (making circles look like ovals).
-# "height" units scale everything relative to the screen height.
+# # ------------------------------------------------------------------
+# # LESSON 5: "HEIGHT" UNITS - Solving Aspect Ratio
+# # ------------------------------------------------------------------
+# # "norm" units stretch if your screen isn't square (making circles look like ovals).
+# # "height" units scale everything relative to the screen height.
 
-print("--- Lesson 5: Height Units ---")
+# print("--- Lesson 5: Height Units ---")
 
-win.units = "height" # Set units to height
+# win.units = "height" # Set units to height
 
-instruction_text.text = (
-    "LESSON 5: Height Units\n\n"
-    "In 'norm', a square might look rectangular on wide screens.\n"
-    "In 'height', (1, 1) is the top/right of a square area.\n"
-    "This ensures shapes keep their proportions.\n\n"
-    "Press SPACE to exit."
-)
+# instruction_text.text = (
+#     "LESSON 5: Height Units\n\n"
+#     "In 'norm', a square might look rectangular on wide screens.\n"
+#     "In 'height', (1, 1) is the top/right of a square area.\n"
+#     "This ensures shapes keep their proportions.\n\n"
+#     "Press SPACE to exit."
+# )
 
-# Draw a perfect circle using height units
-# radius=0.2 means 20% of the screen height
-perfect_circle = visual.Circle(
-    win, 
-    radius=0.2, 
-    pos=(0, 0.25), 
-    fillColor=WHITE, 
-    lineColor=BLACK
-)
+# # Draw a perfect circle using height units
+# # radius=0.2 means 20% of the screen height
+# perfect_circle = visual.Circle(
+#     win, 
+#     radius=0.2, 
+#     pos=(, 0.25), 
+#     fillColor=WHITE, 
+#     lineColor=BLACK
+# )
 
-instruction_text.draw()
-perfect_circle.draw()
-win.flip()
+# instruction_text.draw()
+# perfect_circle.draw()
+# win.flip()
 
 # ------------------------------------------------------------------
 # CLEAN UP
