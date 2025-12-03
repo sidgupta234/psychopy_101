@@ -1,0 +1,6 @@
+word_1,word_2,condition,correct_incorrect,key_pressed,response_status,reaction_time
+tea,coffee,1,1,y,1,1164.5213819974742
+doctor,shampoo,4,1,y,1,1346.405350999703
+bread,buettr,2,0,n,1,1645.94839900019
+truck,ilevehc,3,0,n,1,725.7581100020616
+fruit,orange,1,1,y,1,752.9438959973049

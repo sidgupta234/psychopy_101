@@ -1,12 +1,6 @@
-from psychopy import logging, visual, core, event, gui
+from psychopy import gui, core
 import pandas as pd
 import numpy as np
-
-
-# "core" contains various functions used for timing and quitting the experiment.
-# "gui" allows you to create a dialog box to collect participant information
-# "visual" allows you to draw various stimuli
-# "event" allows you to collect responses
 
 stimulus_data = pd.read_csv("LDT_Project/word_dataset_80.csv", delimiter='\t')
 
