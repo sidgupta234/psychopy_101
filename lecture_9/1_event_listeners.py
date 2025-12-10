@@ -10,10 +10,8 @@ new objects for every single step instead of reusing variables.
 from psychopy import visual, core, event, gui
 import sys
 
-# --- SETUP: WINDOW ONLY ---
-# We do not define colors globally here. We will hardcode them later.
-
 print("--- Initializing Window ---")
+
 win = visual.Window(
     size=[1024, 768],
     units="pix",
@@ -21,9 +19,6 @@ win = visual.Window(
     fullscr=False,     
     title="Event Listener Tutorial"
 )
-
-# NOTE: We deleted the generic 'instr_text' and 'feedback_text' objects.
-# We will create specific ones for each lesson below.
 
 # ------------------------------------------------------------------
 # LESSON 1: THE BASICS - Blocking Input

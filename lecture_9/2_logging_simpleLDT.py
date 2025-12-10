@@ -2,8 +2,20 @@
 
 import os
 from psychopy import visual, core, event, gui # Core modules for psychophysics
+from psychopy import logging
 import pandas as pd # For data handling/saving
 import numpy as np  # For numerical operations
+
+# logging.CRITICAL
+# logging.ERROR
+# logging.WARNING
+# logging.INFO
+# logging.EXP
+# logging.DATA
+# logging.DEBUG
+
+logging.console.setLevel(logging.INFO)   # Shown in console
+logging.LogFile('debug.log', level=logging.DEBUG)
 
 # "core" contains various functions used for timing and quitting the experiment.
 # "gui" allows you to create a dialog box to collect participant information
