@@ -168,7 +168,10 @@ while lesson_active:
     l3_player.draw()
     win.flip()
 
-    keys_pressed = event.getKeys(keyList=['left', 'right', 'up', 'down', 'q'])
+    keys_pressed = event.waitKeys(keyList=['left', 'right', 'up', 'down', 'q'])
+    #keys_pressed = event.waitKeys(keyList=['left', 'right', 'up', 'down', 'q'])
+    
+    player_pos[1] -= 1 
 
     if 'q' in keys_pressed:
         lesson_active = False 
