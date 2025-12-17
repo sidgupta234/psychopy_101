@@ -1,0 +1,6 @@
+word_1,word_2,condition,correct_incorrect,key_pressed,response_status,reaction_time,participant_name,participant_age
+doctor,shampoo,4,1,n,0,1325.4146559920628,Tester,76
+fruit,orange,1,1,y,1,475.8499470044626,Tester,76
+bread,buettr,2,0,n,1,94.84342200448737,Tester,76
+tea,coffee,1,1,n,0,214.70963201136328,Tester,76
+truck,ilevehc,3,0,y,0,56.16264799027704,Tester,76
